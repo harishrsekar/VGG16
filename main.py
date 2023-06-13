@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 import os
-import cv2
+#import cv2
 from keras.models import Model
 from keras.layers import Flatten
 from keras.layers import Dense
@@ -75,29 +75,29 @@ dataset_path = os.listdir(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_
 data_types = os.listdir(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images')
 print(data_types)
 
-print("Types of rooms found: ", len(dataset_path))
+print("Types of items found: ", len(dataset_path))
 
 items = []
 
 for item in data_types:
-    all_rooms = os.listdir(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images' + '/' + item)
+    all_items = os.listdir(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images' + '/' + item)
 
 # Add them to the list
 
-for room in all_rooms:
-    items.append((item, str(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images' + '/' + item) + '/' + room))
-    print(items)
+    for entries in all_items:
+        items.append((item, str(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images' + '/' + item) + '/' + entries))
+        print(items)
 
 # Build a dataframe
-dataset_df = pd.DataFrame(data=items, columns=['room type', 'image'])
+dataset_df = pd.DataFrame(data=items, columns=['item type', 'image'])
 print(dataset_df.head())
 
-print("Total number of rooms in the dataset: ", len(dataset_df))
+print("Total number of items in the dataset: ", len(dataset_df))
 
-room_count = dataset_df['room type'].value_counts()
+item_count = dataset_df['item type'].value_counts()
 
-print("rooms in each category: ")
-print(room_count)
+print("items in each category: ")
+print(item_count)
 
 path = r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images'
 
@@ -121,14 +121,14 @@ images = np.array(images)
 images = images.astype('float32') / 255.0
 print(images.shape)
 
-y = dataset_df['room type'].values
+y = dataset_df['item type'].values
 
 y_labelencoder = LabelEncoder()
 y = y_labelencoder.fit_transform(y)
 print(y)
 
 y = y.reshape(-1, 1)
-onehotencoder = OneHotEncoder(categories=[0])  # Converted  scalar output into vector output where the correct class will be 1 and other will be 0
+onehotencoder = OneHotEncoder(categories=[0])
 Y = onehotencoder.fit_transform(y)
 
 
@@ -136,13 +136,14 @@ images, Y = shuffle(images, Y, random_state=1)
 
 train_x, test_x, train_y, test_y = train_test_split(images, Y, test_size=0.05, random_state=415)
 
-# inpect the shape of the training and testing.
+# inspect the shape of the training and testing.
 print(train_x.shape)
 print(train_y.shape)
 print(test_x.shape)
 print(test_y.shape)
 
-model.fit(train_x, train_y, epochs=10, batch_size=32)
+model.fit(train_x, train_y, epochs=10, batch_size=32) #training the model
 
 preds = model.evaluate(test_x, test_y)
 print("Loss = " + str(preds[0]))
+print ("Test Accuracy = " + str(preds[1]))
