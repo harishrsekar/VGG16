@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 import os
-#import cv2
+import cv2
 from keras.models import Model
 from keras.layers import Flatten
 from keras.layers import Dense
