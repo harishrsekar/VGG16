@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 import os
-# import cv2
+import cv2
 from keras.models import Model
 from keras.layers import Flatten
 from keras.layers import Dense
@@ -85,21 +85,21 @@ for item in data_types:
 # Add them to the list
 
 for room in all_rooms:
-    items.append((item, str('rooms_dataset' + '/' + item) + '/' + room))
+    items.append((item, str(r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images' + '/' + item) + '/' + room))
     print(items)
 
 # Build a dataframe
-rooms_df = pd.DataFrame(data=rooms, columns=['room type', 'image'])
-print(rooms_df.head())
+dataset_df = pd.DataFrame(data=items, columns=['room type', 'image'])
+print(dataset_df.head())
 
-print("Total number of rooms in the dataset: ", len(rooms_df))
+print("Total number of rooms in the dataset: ", len(dataset_df))
 
-room_count = rooms_df['room type'].value_counts()
+room_count = dataset_df['room type'].value_counts()
 
 print("rooms in each category: ")
 print(room_count)
 
-path = 'rooms_dataset/'
+path = r'C:\Users\Harish\PycharmProjects\VGG16\venv\training_images'
 
 im_size = 300
 
@@ -121,7 +121,7 @@ images = np.array(images)
 images = images.astype('float32') / 255.0
 print(images.shape)
 
-y = rooms_df['room type'].values
+y = dataset_df['room type'].values
 
 y_labelencoder = LabelEncoder()
 y = y_labelencoder.fit_transform(y)
